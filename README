@@ -1,0 +1,55 @@
+This is a Django application for the CRAMS Provision
+
+Getting Started
+---------------
+
+Set up a virtualenv and create py35 virtualenv
+
+# Install python3.5
+
+# Run flake8
+
+tox -e flake8
+
+# Run test
+
+tox -e py35
+
+* Copy local_settings.py.example to local_settings.py
+* Modify it to point a desired keystone server and crams db api server.
+
+# Start crams provision cron job
+
+# Install django-crontab
+
+# add django-crontab to installed apps in django settings.py:
+
+INSTALLED_APPS = (
+    'django_crontab',
+    ...
+)
+
+#define your cron job module and  add this to your settings.py:
+
+CRONJOBS = [
+    ('*/5 * * * *', 'nc_provision.cron.provision.provision_cron_job', '&> /tmp/crams_provision.log')
+]
+
+# Please see settings for more details
+
+# github reference at https://github.com/kraiz/django-crontab
+
+# To add all defined jobs from CRONJOBS to crontab (of the user which you are running this command with):
+
+python manage.py crontab add
+
+# show current active jobs of this project:
+
+python manage.py crontab show
+
+# removing all defined jobs is straight forward:
+
+python manage.py crontab remove
+
+
+

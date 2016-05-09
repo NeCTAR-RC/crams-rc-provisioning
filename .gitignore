@@ -1,0 +1,13 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+crams_provision/local/local_settings.py
+*.coverage
+coverage.xml
+crams_provision/tests/reporter/*.xml
+.python-version
+.tox
+#.idea/*.*
+.idea/
+*.sqlite3
+crams_provision.egg-info
