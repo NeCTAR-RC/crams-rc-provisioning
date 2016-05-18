@@ -1,4 +1,4 @@
-from crams_provision.common.nectar_allocation import NcProject, NcNovaQuota, \
+from crams_provision.crams.nectar_allocation import NcProject, NcNovaQuota, \
     NcCinderQuota, NcSwiftQuota
 
 RAM_PER_CORE = 4096

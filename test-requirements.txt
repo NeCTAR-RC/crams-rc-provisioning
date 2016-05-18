@@ -1,6 +1,3 @@
-django_nose
-nose-exclude
-factory_boy
-mox
-mox3
-mock==1.0
+nose==1.3.7
+mock==2.0.0
+coverage==4.0.3

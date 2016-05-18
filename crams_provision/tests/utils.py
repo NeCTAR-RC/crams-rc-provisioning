@@ -1,6 +1,6 @@
 from itertools import chain, combinations
 
-from django.test import TestCase
+import unittest
 import simplejson
 
 
@@ -39,7 +39,7 @@ def get_power_set_as_list(aList):
     return retList
 
 
-class ProvisionTestCase(TestCase):
+class ProvisionTestCase(unittest.TestCase):
     pass
 
 

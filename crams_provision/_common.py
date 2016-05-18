@@ -9,7 +9,7 @@ from keystoneclient.auth.identity import v3
 
 from crams_provision.settings import OS_AUTH_URL, OS_TENANT_NAME, \
     OS_USERNAME, OS_PASSWORD, OS_TENANT_ID, OS_USER_ID
-from crams_provision.common.exceptions import ProvisionException
+from crams_provision.crams.exceptions import ProvisionException
 
 SWIFT_QUOTA_KEY = 'x-account-meta-quota-bytes'
 

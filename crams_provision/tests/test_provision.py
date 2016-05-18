@@ -4,18 +4,18 @@ from collections import defaultdict
 
 import nose.tools
 
-from nc_provision.ncprovision import NcProvision, ProvisionException
+from crams_provision.rcprovision import NcProvision, ProvisionException
 from crams_provision.tests.utils import ProvisionTestCase, get_dynamic_class, \
     get_power_set_as_list
-from crams_provision.common.exceptions import IdentifierException
+from crams_provision.crams.exceptions import IdentifierException
 
 
 class TenancyTests(ProvisionTestCase):
     def setUp(self):
         self.ncprov_obj = NcProvision()
 
-    @mock.patch('nc_provision._common.get_keystone_client')
-    @mock.patch('nc_provision.ncprovision.common')
+    @mock.patch('crams_provision._common.get_keystone_client')
+    @mock.patch('crams_provision.rcprovision.common')
     def test_tenant_provision(self, _common_mock, kc):
         proj_dict = {}
         proj_dict['identifier'] = 'sad4r4'
@@ -37,6 +37,7 @@ class TenancyTests(ProvisionTestCase):
         # {'name':'keystoneClient Mock Object'})
         _common_mock.get_keystone_client.return_value = kc
         self.ncprov_obj._init_clients()
+        # self.ncprov_obj.kc = kc
         returned_tenant = self.ncprov_obj.tenant_provision(nc_project)
 
         _common_mock.add_tenant.assert_called_with(kc,
@@ -96,8 +97,8 @@ class TenancyTests(ProvisionTestCase):
         proj_id_length_tenant_exception_fn(IdentifierException,
                                            'Tenant name too long')
 
-    @mock.patch('nc_provision._common.nova_client')
-    @mock.patch('nc_provision.ncprovision.common')
+    @mock.patch('crams_provision._common.nova_client')
+    @mock.patch('crams_provision.rcprovision.common')
     def test_compute_provision(self, _common_mock, nc):
         _common_mock.get_nova_client.return_value = nc
         self.ncprov_obj._init_clients()
@@ -209,8 +210,8 @@ class TenancyTests(ProvisionTestCase):
                          'Nova compute provision error, ' + exception_msg)
         _common_mock.get_nova_quota.side_effect = None
 
-    @mock.patch('nc_provision._common.nova_client')
-    @mock.patch('nc_provision.ncprovision.common')
+    @mock.patch('crams_provision._common.nova_client')
+    @mock.patch('crams_provision.rcprovision.common')
     def test_volume_storage_provision(self, _common_mock, nc):
         _common_mock.get_nova_client.return_value = nc
         self.ncprov_obj._init_clients()
@@ -251,8 +252,8 @@ class TenancyTests(ProvisionTestCase):
                          'GB, Cinder volume provision error, ' + exception_msg)
         _common_mock.add_cinder_quota.side_effect = None
 
-    @mock.patch('nc_provision._common.nova_client')
-    @mock.patch('nc_provision.ncprovision.common')
+    @mock.patch('crams_provision._common.nova_client')
+    @mock.patch('crams_provision.rcprovision.common')
     def test_object_storage_provision(self, _common_mock, nc):
         _common_mock.get_nova_client.return_value = nc
         self.ncprov_obj._init_clients()

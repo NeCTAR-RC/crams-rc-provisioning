@@ -1,3 +1,8 @@
+"""
+CRAMS NeCTAR Provisioning local settings to override some of default settings
+
+"""
+
 # CRAMS api server
 CRAMS_SERVER_BASE = 'http://localhost:8000'
 
@@ -15,13 +20,13 @@ OS_AUTH_URL = 'http://localhost:5000/v3/'
 OS_TENANT_NAME = 'merc_test_project'
 
 # tenant_id
-OS_TENANT_ID = '1234124312431234'
+OS_TENANT_ID = '1234124312431234adaf'
 
 # admin user name
-OS_USERNAME = ''mercdev@monash.edu'
+OS_USERNAME = 'keystone_admin'
 
 # admin user id
 OS_USER_ID = '1234123412341234'
 
 # admin user password
-OS_PASSWORD = 'merc2dev'
+OS_PASSWORD = 'keystone_admin_password'

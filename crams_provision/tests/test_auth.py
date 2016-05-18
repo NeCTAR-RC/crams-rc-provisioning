@@ -1,10 +1,10 @@
 import unittest.mock as mock
-from crams_provision.common.crams_auth import *
+from crams_provision.crams.crams_auth import *
 from crams_provision.tests.utils import ProvisionTestCase, HttpMockResponse
 
 
 class CommonMethodsTest(ProvisionTestCase):
-    @mock.patch('crams_provision.common.crams_auth.urllib3')
+    @mock.patch('crams_provision.crams.crams_auth.urllib3')
     def test_cram_login(self, urllib3PoolMock):
         url = 'http://dummyUrl'
         user_name = 'dummyUser'
@@ -31,7 +31,7 @@ class CommonMethodsTest(ProvisionTestCase):
         self.assertFalse(login_response['success'])
         self.assertEqual(login_response['reason'], 400)
 
-    @mock.patch('crams_provision.common.crams_auth.urllib3')
+    @mock.patch('crams_provision.crams.crams_auth.urllib3')
     def test_cram__kstoken_login(self, urllib3PoolMock):
         url = 'http://dummyUrl'
         ks_token = 'dummyafsad2sddsdfew002fsad1'

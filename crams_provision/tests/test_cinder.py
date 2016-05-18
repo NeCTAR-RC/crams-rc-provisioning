@@ -1,7 +1,7 @@
 import unittest.mock as mock
 
 from crams_provision.tests.utils import ProvisionTestCase, get_dynamic_class
-from nc_provision._common import add_cinder_quota, get_cinder_quota
+from crams_provision._common import add_cinder_quota, get_cinder_quota
 
 
 # test cinder volume storage
@@ -17,7 +17,7 @@ class CinderTest(ProvisionTestCase):
                                                  })
 
     # add a block of volume storage using a mock cinder client
-    @mock.patch('nc_provision._common.cinder_client')
+    @mock.patch('crams_provision._common.cinder_client')
     def test_cinder_add_quota(self, cinder_client):
         cc = cinder_client
 
@@ -41,7 +41,7 @@ class CinderTest(ProvisionTestCase):
 
     # add a block of volume storage using a mock cinder client with a
     # different zone
-    @mock.patch('nc_provision._common.cinder_client')
+    @mock.patch('crams_provision._common.cinder_client')
     def test_cinder_add_quota_zone(self, cinder_client):
         cc = cinder_client
 
@@ -65,7 +65,7 @@ class CinderTest(ProvisionTestCase):
             add_cinder_quota(cc, self.tenant, zone, gigabyte, volume), quota)
 
     # get a storage quota using mock cinder client
-    @mock.patch('nc_provision._common.cinder_client')
+    @mock.patch('crams_provision._common.cinder_client')
     def test_cinder_get_quota(self, cinder_client):
         cc = cinder_client
 

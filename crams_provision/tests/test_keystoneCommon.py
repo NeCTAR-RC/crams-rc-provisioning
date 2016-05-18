@@ -4,7 +4,7 @@ import nose.tools
 
 from crams_provision.tests.utils import ProvisionTestCase, get_dynamic_class, \
     get_power_set_as_list
-from nc_provision._common import *
+from crams_provision._common import *
 
 
 # Test _common.py get_keystone_client() works and that settings for
@@ -30,7 +30,7 @@ class CommonMethodsTest(ProvisionTestCase):
     #  - see http://stackoverflow.com/questions/31709792/
     # patching-a-class-yields-attributeerror-mock-object-
     # has-no-attribute-when-acce
-    @mock.patch('nc_provision._common.get_keystone_client')
+    @mock.patch('crams_provision._common.get_keystone_client')
     def test_add_tenant(self, ks_client):
         kc = ks_client
         name = 'Test Name'
@@ -116,7 +116,7 @@ class CommonMethodsTest(ProvisionTestCase):
         add_tenant_exception_fn(ProvisionException, "Couldn't find roles")
         kc.roles.find.side_effect = None
 
-    @mock.patch('nc_provision._common.get_keystone_client')
+    @mock.patch('crams_provision._common.get_keystone_client')
     def test_update_tenant(self, ks_client):
         kc = ks_client
 
@@ -145,7 +145,7 @@ class CommonMethodsTest(ProvisionTestCase):
         # update_tenant_exception_fn(Exception, "Tenant not found")
         # returned_tenant = update_tenant(kc,testTenant, allocation_id, expiry)
 
-    @mock.patch('nc_provision._common.nova_client')
+    @mock.patch('crams_provision._common.nova_client')
     def test_get_nova_quota(self, nova_client):
         nc = nova_client
 
@@ -158,7 +158,7 @@ class CommonMethodsTest(ProvisionTestCase):
         nc.quotas.get.assert_called_with(tenant_id=tenant_id)
         self.assertEqual(returned_quota, expected_quota)
 
-    @mock.patch('nc_provision._common.nova_client')
+    @mock.patch('crams_provision._common.nova_client')
     def test_add_nova_quota(self, nova_client):
         nc = nova_client
         tenant_id = 'Test004'

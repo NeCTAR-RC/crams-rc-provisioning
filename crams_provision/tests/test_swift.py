@@ -1,7 +1,7 @@
 import unittest.mock as mock
 
 from crams_provision.tests.utils import ProvisionTestCase, get_dynamic_class
-from nc_provision._common import add_swift_quota, get_swift_quota, \
+from crams_provision._common import add_swift_quota, get_swift_quota, \
     get_swift_tenant_connection, convert_quota_to_gb
 
 
@@ -20,7 +20,7 @@ class SwiftTest(ProvisionTestCase):
                                                  'username': 'test@test.com'
                                                  })
 
-    @mock.patch('nc_provision._common.swift_client')
+    @mock.patch('crams_provision._common.swift_client')
     def test_swift_add_quota(self, sc):
         sc.get_auth.return_value = \
             ("http://swift-auth-url/" + self.tenant.tenantId, "token_id")
@@ -32,7 +32,7 @@ class SwiftTest(ProvisionTestCase):
         self.assertEquals(quota_bytes, self.raw_quota)
         self.assertEquals(conn_attempts, 1)
 
-    @mock.patch('nc_provision._common.swift_client')
+    @mock.patch('crams_provision._common.swift_client')
     def test_swift_get_quota(self, sc):
         sc.get_auth.return_value = \
             ("http://swift-auth-url/" + self.tenant.tenantId, "token_id")
@@ -44,7 +44,7 @@ class SwiftTest(ProvisionTestCase):
 
         self.assertEquals(quota_in_gb, self.gigabytes)
 
-    @mock.patch('nc_provision._common.swift_client')
+    @mock.patch('crams_provision._common.swift_client')
     def test_swift_tenant_conn(self, sc):
         sc.get_auth.return_value = \
             ("http://swift-auth-url/auth", "token_id")

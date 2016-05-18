@@ -5,18 +5,18 @@ import logging
 import simplejson
 
 from crams_provision import settings
-from crams_provision.common.crams_auth import cram__kstoken_login
-from crams_provision.common.crams_api import get_approved_requests
-from crams_provision.common.crams_api import update_provision_results
-from crams_provision.common.exceptions import ProvisionException, \
+from crams_provision.crams.crams_auth import cram__kstoken_login
+from crams_provision.crams.crams_api import get_approved_requests
+from crams_provision.crams.crams_api import update_provision_results
+from crams_provision.crams.exceptions import ProvisionException, \
     IdentifierException
-from crams_provision.common.crams_alloc_parser import parse_allocations
-from crams_provision.common.provision_details import ProjectProvisionStatus, \
+from crams_provision.crams.crams_alloc_parser import parse_allocations
+from crams_provision.crams.provision_details import ProjectProvisionStatus, \
     RequestProvisionStatus, ComputeProvisionStatus, StorageProvisionStatus, \
     Prod, System, ProjectId
-from nc_provision import _common as common
-from crams_provision.common.nectar_allocation import NcProject, \
+from crams_provision.crams.nectar_allocation import NcProject, \
     NcNovaQuota, NcCinderQuota, NcSwiftQuota
+from crams_provision import _common as common
 
 LOG = logging.getLogger(__name__)
 
@@ -89,8 +89,7 @@ class NcProvision(object):
             quota_string.append('  Object Store Gigabytes: %s' % squota)
         return quota_string
 
-    def provision(self):
-
+    def fetch_alloc(self):
         try:
             self._init_clients()
         except Exception as ex:
@@ -110,10 +109,9 @@ class NcProvision(object):
             LOG.error(error_msg)
             print(error_msg)
             sys.exit(1)
-
+        alloc_list = []
         if alloc_res['success']:
             allocations = alloc_res['allocations']
-            # print('----allocation: {}'.format(allocations))
             try:
                 alloc_list = parse_allocations(allocations)
             except Exception as ex:
@@ -121,87 +119,95 @@ class NcProvision(object):
                 LOG.error(error_msg)
                 print(error_msg)
                 sys.exit(0)
-
-            if alloc_list:
-                for nc_proj in alloc_list:
-                    self._print_request_provision(nc_proj)
-                    tenant = None
-                    p_id = nc_proj.project_id
-                    # create a project provision result status
-                    proj_prov = ProjectProvisionStatus(p_id)
-
-                    tenant = self.provison_tenant(nc_proj, proj_prov)
-
-                    if tenant:
-                        # initialize the request provision results
-                        request_provisions = []
-                        proj_prov.request_provisions = request_provisions
-                        req_prov = RequestProvisionStatus(nc_proj.crams_req_id)
-                        request_provisions.append(req_prov)
-
-                        # nova quota
-                        nc_nova_quota_list = nc_proj.nc_nova_quota_list
-                        if nc_nova_quota_list:
-                            # initialize the compute provision results
-                            compute_provisions = []
-                            req_prov.compute_provisions = compute_provisions
-
-                            for nc_nova_quota in nc_nova_quota_list:
-                                # each compute provision result
-                                self.provision_compute_requests(
-                                    compute_provisions,
-                                    nc_nova_quota, tenant)
-
-                        # cinder volume provision
-                        nc_cquota_list = nc_proj.nc_cinder_quota_list
-                        requesting_nectar_quota = False
-                        sum_quota = 0
-
-                        # initialize storage provision result list
-                        storage_provisions = []
-                        # add storage provision result list into a request
-                        # provision
-                        req_prov.storage_provisions = storage_provisions
-
-                        if nc_cquota_list:
-                            for nc_cinder_quota in nc_cquota_list:
-                                requesting_nectar_quota, sum_quota = \
-                                    self.provision_cinder_requests(
-                                        nc_cinder_quota,
-                                        requesting_nectar_quota,
-                                        storage_provisions,
-                                        sum_quota, tenant)
-
-                        # if none nectar zone selected, just
-                        # allocate a volume size in the nectar
-                        # zone with a sum size.
-                        if not requesting_nectar_quota and sum_quota > 0:
-                            try:
-                                self.cinder_volume_provision(tenant,
-                                                             'nectar',
-                                                             sum_quota,
-                                                             sum_quota)
-                            except Exception as ex:
-                                error_msg = '{}'.format(ex)
-                                LOG.error(error_msg)
-                                print(error_msg)
-
-                        # swift object provision
-                        obj_storage = defaultdict(int)
-                        nc_swift_quota_list = nc_proj.nc_swift_quota_list
-
-                        if nc_swift_quota_list:
-                            for nc_swift_quota in nc_swift_quota_list:
-                                self.provision_swift_request(
-                                    nc_swift_quota,
-                                    obj_storage,
-                                    storage_provisions,
-                                    tenant)
-
-                    self.provision_result_callback(proj_prov, token)
-
         else:
-            LOG.error('Get allocations failed, {}'.format(alloc_res['reason']))
+            error_msg = 'Get allocations failed, {}'.format(
+                alloc_res['reason'])
+            LOG.error(error_msg)
+            print(error_msg)
+            sys.exit(0)
+
+        return alloc_list, token
+
+    def provision(self, alloc_list, token):
+        print('Start to provision ...')
+        if alloc_list:
+            for nc_proj in alloc_list:
+                self._print_request_provision(nc_proj)
+                tenant = None
+                p_id = nc_proj.project_id
+                # create a project provision result status
+                proj_prov = ProjectProvisionStatus(p_id)
+
+                tenant = self.provison_tenant(nc_proj, proj_prov)
+
+                if tenant:
+                    # initialize the request provision results
+                    request_provisions = []
+                    proj_prov.request_provisions = request_provisions
+                    req_prov = RequestProvisionStatus(nc_proj.crams_req_id)
+                    request_provisions.append(req_prov)
+
+                    # nova quota
+                    nc_nova_quota_list = nc_proj.nc_nova_quota_list
+                    if nc_nova_quota_list:
+                        # initialize the compute provision results
+                        compute_provisions = []
+                        req_prov.compute_provisions = compute_provisions
+
+                        for nc_nova_quota in nc_nova_quota_list:
+                            # each compute provision result
+                            self.provision_compute_requests(
+                                compute_provisions,
+                                nc_nova_quota, tenant)
+
+                    # cinder volume provision
+                    nc_cquota_list = nc_proj.nc_cinder_quota_list
+                    requesting_nectar_quota = False
+                    sum_quota = 0
+
+                    # initialize storage provision result list
+                    storage_provisions = []
+                    # add storage provision result list into a request
+                    # provision
+                    req_prov.storage_provisions = storage_provisions
+
+                    if nc_cquota_list:
+                        for nc_cinder_quota in nc_cquota_list:
+                            requesting_nectar_quota, sum_quota = \
+                                self.provision_cinder_requests(
+                                    nc_cinder_quota,
+                                    requesting_nectar_quota,
+                                    storage_provisions,
+                                    sum_quota, tenant)
+
+                    # if none nectar zone selected, just
+                    # allocate a volume size in the nectar
+                    # zone with a sum size.
+                    if not requesting_nectar_quota and sum_quota > 0:
+                        try:
+                            self.cinder_volume_provision(tenant,
+                                                         'nectar',
+                                                         sum_quota,
+                                                         sum_quota)
+                        except Exception as ex:
+                            error_msg = '{}'.format(ex)
+                            LOG.error(error_msg)
+                            print(error_msg)
+
+                    # swift object provision
+                    obj_storage = defaultdict(int)
+                    nc_swift_quota_list = nc_proj.nc_swift_quota_list
+
+                    if nc_swift_quota_list:
+                        for nc_swift_quota in nc_swift_quota_list:
+                            self.provision_swift_request(
+                                nc_swift_quota,
+                                obj_storage,
+                                storage_provisions,
+                                tenant)
+
+                self.provision_result_callback(proj_prov, token)
+        print('Finished to provision ...')
 
     def provision_swift_request(self, nc_swift_quota, obj_storage,
                                 storage_provisions, tenant):

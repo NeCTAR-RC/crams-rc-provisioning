@@ -1,4 +1,4 @@
-This is a Django application for the CRAMS Provision
+This is a stand-alone application for the CRAMS NeCTAR provisioning
 
 Getting Started
 ---------------
@@ -16,40 +16,30 @@ tox -e flake8
 tox -e py35
 
 * Copy local_settings.py.example to local_settings.py
-* Modify it to point a desired keystone server and crams db api server.
+* Modify it to point a desired keystone server and crams api server.
 
-# Start crams provision cron job
+Start CRAMS NeCTAR Provision
+----------------------------
 
-# Install django-crontab
+# To show the help message:
 
-# add django-crontab to installed apps in django settings.py:
+python crams_provision/provision.py --help
 
-INSTALLED_APPS = (
-    'django_crontab',
-    ...
-)
+# To list all approved allocation requests ids:
 
-#define your cron job module and  add this to your settings.py:
+python crams_provision/provision.py --list
 
-CRONJOBS = [
-    ('*/5 * * * *', 'nc_provision.cron.provision.provision_cron_job', '&> /tmp/crams_provision.log')
-]
+# To provision a single allocation request
 
-# Please see settings for more details
+python crams_provision/provision.py id
 
-# github reference at https://github.com/kraiz/django-crontab
+# To provision all allocation requests
 
-# To add all defined jobs from CRONJOBS to crontab (of the user which you are running this command with):
+python crams_provision/provision.py
 
-python manage.py crontab add
 
-# show current active jobs of this project:
 
-python manage.py crontab show
 
-# removing all defined jobs is straight forward:
-
-python manage.py crontab remove
 
 
 
