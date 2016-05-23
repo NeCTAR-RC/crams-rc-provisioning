@@ -37,4 +37,12 @@ OS_PASSWORD = 'keystone_admin_password'
 try:
     from crams_provision.local.local_settings import *
 except ImportError:
-    logging.warning("No local_settings file found.")
+    logging.debug("No local_settings file found.")
+
+# Used for production installs
+try:
+    with open("/etc/cramsclient-nectar/settings.py") as f:
+        code = compile(f.read(), "/etc/cramsclient-nectar/settings.py", 'exec')
+        exec(code)
+except IOError:
+    logging.debug("No settings file found at /etc/cramsclient-nectar/settings.py.")
