@@ -1,0 +1,18 @@
+Source: cramsclient-nectar
+Maintainer: Sam Morrison <sorrison@gmail.com>
+Section: python
+Priority: optional
+Build-Depends: python3-setuptools (>= 20.7), python3-pip, python3 (>= 3.5), debhelper (>= 9), dh-python
+Standards-Version: 3.9.1
+
+Package: python3-cramsclient-nectar
+Architecture: all
+Depends: ${misc:Depends}, ${python3:Depends}
+Description: CRAMS python3 Library 
+ CRAMS python3 Library for NeCTAR provisioning
+
+Package: cramsclient-nectar
+Architecture: all
+Depends: ${misc:Depends}, python3-cramsclient-nectar (= ${binary:Version})
+Description: CRAMS NeCTAR Provisioner
+ CRAMS client for NeCTAR provisioning
