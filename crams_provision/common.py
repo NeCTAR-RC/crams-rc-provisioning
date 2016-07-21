@@ -148,7 +148,9 @@ def get_keystone_session():
     auth = v3.Password(auth_url=settings.OS_AUTH_URL,
                        username=settings.OS_USERNAME,
                        password=settings.OS_PASSWORD,
-                       project_name=settings.OS_PROJECT_NAME)
+                       project_name=settings.OS_PROJECT_NAME,
+                       user_domain_id=settings.OS_DOMAIN,
+                       project_domain_id=settings.OS_DOMAIN)
     return session.Session(auth=auth)
 
 

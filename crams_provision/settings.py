@@ -16,6 +16,7 @@ OS_AUTH_URL = 'http://localhost:5000/v3/'
 OS_PROJECT_NAME = None
 OS_USERNAME = None
 OS_PASSWORD = None
+OS_DOMAIN = 'default'
 
 # Import the local_settings.py to override some of the default settings,
 try:
