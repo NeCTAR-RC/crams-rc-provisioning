@@ -7,8 +7,7 @@ from swiftclient import client as swift_client
 from keystoneauth1 import session
 from keystoneclient.auth.identity import v3
 
-from crams_provision.settings import OS_AUTH_URL, OS_TENANT_NAME, \
-    OS_USERNAME, OS_PASSWORD, OS_TENANT_ID, OS_USER_ID
+from crams_provision import settings
 from crams_provision.crams.exceptions import ProvisionException
 
 SWIFT_QUOTA_KEY = 'x-account-meta-quota-bytes'
@@ -146,10 +145,10 @@ def add_swift_quota(sc, tenant, gigabytes):
 
 
 def get_keystone_session():
-    auth = v3.Password(auth_url=OS_AUTH_URL,
-                       user_id=OS_USER_ID,
-                       password=OS_PASSWORD,
-                       project_id=OS_TENANT_ID)
+    auth = v3.Password(auth_url=settings.OS_AUTH_URL,
+                       username=settings.OS_USERNAME,
+                       password=settings.OS_PASSWORD,
+                       project_name=settings.OS_PROJECT_NAME)
     return session.Session(auth=auth)
 
 
@@ -176,10 +175,10 @@ def get_cinder_client():
 
 
 def get_swift_client():
-    sc = swift_client.Connection(authurl=OS_AUTH_URL,
-                                 user=OS_USERNAME,
-                                 key=OS_PASSWORD,
-                                 tenant_name=OS_TENANT_NAME,
+    sc = swift_client.Connection(authurl=settings.OS_AUTH_URL,
+                                 user=settings.OS_USERNAME,
+                                 key=settings.OS_PASSWORD,
+                                 tenant_name=settings.OS_PROJECT_NAME,
                                  auth_version='3')
     return sc
 
