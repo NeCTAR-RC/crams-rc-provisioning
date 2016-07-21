@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-try:
-    from setuptools import setup, find_packages
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
+from pip.req import parse_requirements
 
+
+requirements = parse_requirements("requirements.txt", session=False)
 readme = open('README').read()
 
 setup(
@@ -19,20 +19,7 @@ setup(
     platforms='Linux, Mac OS',
     packages=find_packages(exclude=['tests', 'local']),
     include_package_data=True,
-    install_requires=[
-                      "python-dateutil==2.4.2",
-                      "python-ceilometerclient==2.1.0",
-                      "python-cinderclient==1.5.0",
-                      "python-heatclient==0.8.0",
-                      "python-keystoneclient==2.0.0",
-                      "python-neutronclient==3.1.0",
-                      "python-novaclient==2.35.0",
-                      "python-saharaclient==0.11.1",
-                      "python-swiftclient==2.6.0",
-                      "python-troveclient==1.4.0",
-                      "simplejson==3.8.1",
-                      "urllib3==1.14",
-                      ],
+    install_requires=[str(r.req) for r in requirements],
     license="GPLv3+",
     zip_safe=False,
     keywords='crams_provision',
@@ -45,4 +32,9 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Operating System :: OS Independent',
     ],
+    entry_points="""
+    # -*- Entry points: -*-
+    [console_scripts]
+    crams-provision-nectar = crams_provision.provision:main
+    """,
 )
