@@ -4,7 +4,7 @@ import nose.tools
 
 from crams_provision.tests.utils import ProvisionTestCase, get_dynamic_class, \
     get_power_set_as_list
-from crams_provision._common import *
+from crams_provision import common
 
 
 # Test _common.py get_keystone_client() works and that settings for
@@ -12,15 +12,17 @@ from crams_provision._common import *
 class CommonMethodsTest(ProvisionTestCase):
     def test_openstack_client(self):
         # Test Keystone
-        # import pdb; pdb.set_trace()
-        self.assertIsNotNone(get_keystone_client(),
+        self.assertIsNotNone(common.get_keystone_client(),
                              'Cannot fetch Keystone client')
         # Test Nova
-        self.assertIsNotNone(get_nova_client(), 'Cannot fetch Nova client')
+        self.assertIsNotNone(common.get_nova_client(),
+                             'Cannot fetch Nova client')
         # Test Cinder
-        self.assertIsNotNone(get_cinder_client(), 'Cannot fetch Cinder client')
+        self.assertIsNotNone(common.get_cinder_client(),
+                             'Cannot fetch Cinder client')
         # Test Swift
-        self.assertIsNotNone(get_swift_client(), 'Cannot fetch Swift client')
+        self.assertIsNotNone(common.get_swift_client(),
+                             'Cannot fetch Swift client')
 
     def test_convert_trial_project(self):
         pass  # wait for V3 of Keystone API to be used before writing test
@@ -30,7 +32,7 @@ class CommonMethodsTest(ProvisionTestCase):
     #  - see http://stackoverflow.com/questions/31709792/
     # patching-a-class-yields-attributeerror-mock-object-
     # has-no-attribute-when-acce
-    @mock.patch('crams_provision._common.get_keystone_client')
+    @mock.patch('crams_provision.common.get_keystone_client')
     def test_add_tenant(self, ks_client):
         kc = ks_client
         name = 'Test Name'
@@ -72,11 +74,12 @@ class CommonMethodsTest(ProvisionTestCase):
         kc.domains.find.return_value = "Default"
 
         # Test normal success scenario
-        tenant = add_tenant(kc, name,
-                            description, manager_email,
-                            allocation_id, expiry,
-                            allocation_home)  # call function to be tested
-        update_tenant(kc, tenant, allocation_id, expiry, allocation_home)
+        tenant = common.add_tenant(kc, name,
+                                   description, manager_email,
+                                   allocation_id, expiry,
+                                   allocation_home)
+        common.update_tenant(kc, tenant, allocation_id,
+                             expiry, allocation_home)
 
         # start assertions
         kc.projects.create.assert_called_with(domain="Default",
@@ -101,22 +104,23 @@ class CommonMethodsTest(ProvisionTestCase):
         # Test all AddTenant exceptions
         def add_tenant_exception_fn(exception_class, error_msg_expected):
             with nose.tools.assert_raises(exception_class) as cm:
-                add_tenant(kc, name, description, manager_email, allocation_id,
-                           expiry, allocation_home)
+                common.add_tenant(kc, name, description, manager_email,
+                                  allocation_id, expiry, allocation_home)
             self.assertEqual(str(cm.exception), error_msg_expected)
 
         # Manager not Found, expect a ProvisionException
         kc.users.find.side_effect = Exception('dummy')
-        add_tenant_exception_fn(ProvisionException,
+        add_tenant_exception_fn(common.ProvisionException,
                                 "Couldn't find a unique user with that email")
         kc.users.find.side_effect = None
 
         # Roles not found
         kc.roles.find.side_effect = Exception('dummy')
-        add_tenant_exception_fn(ProvisionException, "Couldn't find roles")
+        add_tenant_exception_fn(common.ProvisionException,
+                                "Couldn't find roles")
         kc.roles.find.side_effect = None
 
-    @mock.patch('crams_provision._common.get_keystone_client')
+    @mock.patch('crams_provision.common.get_keystone_client')
     def test_update_tenant(self, ks_client):
         kc = ks_client
 
@@ -129,9 +133,9 @@ class CommonMethodsTest(ProvisionTestCase):
         allocation_home = 'monash'
 
         kc.projects.update.return_value = expected_tenant
-        returned_tenant = update_tenant(kc, in_tenant,
-                                        allocation_id, expiry,
-                                        allocation_home)
+        returned_tenant = common.update_tenant(kc, in_tenant,
+                                               allocation_id, expiry,
+                                               allocation_home)
 
         self.assertEqual(returned_tenant, expected_tenant)
 
@@ -145,7 +149,7 @@ class CommonMethodsTest(ProvisionTestCase):
         # update_tenant_exception_fn(Exception, "Tenant not found")
         # returned_tenant = update_tenant(kc,testTenant, allocation_id, expiry)
 
-    @mock.patch('crams_provision._common.nova_client')
+    @mock.patch('crams_provision.common.nova_client')
     def test_get_nova_quota(self, nova_client):
         nc = nova_client
 
@@ -154,11 +158,11 @@ class CommonMethodsTest(ProvisionTestCase):
         nc.quotas.get.return_value = expected_quota
         tenant_id = 'Test003'
         tenant = get_dynamic_class('Tenant', {'id': tenant_id})
-        returned_quota = get_nova_quota(nc, tenant)
+        returned_quota = common.get_nova_quota(nc, tenant)
         nc.quotas.get.assert_called_with(tenant_id=tenant_id)
         self.assertEqual(returned_quota, expected_quota)
 
-    @mock.patch('crams_provision._common.nova_client')
+    @mock.patch('crams_provision.common.nova_client')
     def test_add_nova_quota(self, nova_client):
         nc = nova_client
         tenant_id = 'Test004'
@@ -177,7 +181,8 @@ class CommonMethodsTest(ProvisionTestCase):
             ram = part_quota.get('ram', None)
 
             nc.quotas.update.return_value = part_quota
-            returned_quota = add_nova_quota(nc, tenant, cores, instances, ram)
+            returned_quota = common.add_nova_quota(nc, tenant, cores,
+                                                   instances, ram)
             nc.quotas.update.assert_called_with(tenant_id=tenant_id,
                                                 **part_quota)
             self.assertEqual(returned_quota, part_quota)

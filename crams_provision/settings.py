@@ -35,7 +35,7 @@ OS_PASSWORD = 'keystone_admin_password'
 
 # Import the local_settings.py to override some of the default settings,
 try:
-    from crams_provision.local.local_settings import *
+    from crams_provision.local.local_settings import *  # noqa
 except ImportError:
     logging.debug("No local_settings file found.")
 

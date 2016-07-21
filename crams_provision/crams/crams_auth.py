@@ -29,7 +29,7 @@ def cram_login(url, username, password):
     return auth_response
 
 
-def cram__kstoken_login(url, ks_token):
+def cram_kstoken_login(url, ks_token):
     http = urllib3.PoolManager()
     json_body = simplejson.dumps({'token': ks_token})
     headers = {'Content-Type': 'application/json'}

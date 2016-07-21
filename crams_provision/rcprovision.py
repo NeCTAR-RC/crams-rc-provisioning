@@ -5,7 +5,7 @@ import logging
 import simplejson
 
 from crams_provision import settings
-from crams_provision.crams.crams_auth import cram__kstoken_login
+from crams_provision.crams.crams_auth import cram_kstoken_login
 from crams_provision.crams.crams_api import get_approved_requests
 from crams_provision.crams.crams_api import update_provision_results
 from crams_provision.crams.exceptions import ProvisionException, \
@@ -16,7 +16,7 @@ from crams_provision.crams.provision_details import ProjectProvisionStatus, \
     Prod, System, ProjectId
 from crams_provision.crams.nectar_allocation import NcProject, \
     NcNovaQuota, NcCinderQuota, NcSwiftQuota
-from crams_provision import _common as common
+from crams_provision import common
 
 LOG = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ class NcProvision(object):
 
     def _auth(self):
         # return cram_login(self.auth_url, self.auth_admin, self.auth_password)
-        return cram__kstoken_login(self.auth_url, self.token)
+        return cram_kstoken_login(self.auth_url, self.token)
 
     def _init_clients(self):
         self.kc = common.get_keystone_client()

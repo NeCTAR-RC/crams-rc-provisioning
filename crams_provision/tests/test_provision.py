@@ -14,7 +14,7 @@ class TenancyTests(ProvisionTestCase):
     def setUp(self):
         self.ncprov_obj = NcProvision()
 
-    @mock.patch('crams_provision._common.get_keystone_client')
+    @mock.patch('crams_provision.common.get_keystone_client')
     @mock.patch('crams_provision.rcprovision.common')
     def test_tenant_provision(self, _common_mock, kc):
         proj_dict = {}
@@ -97,7 +97,7 @@ class TenancyTests(ProvisionTestCase):
         proj_id_length_tenant_exception_fn(IdentifierException,
                                            'Tenant name too long')
 
-    @mock.patch('crams_provision._common.nova_client')
+    @mock.patch('crams_provision.common.nova_client')
     @mock.patch('crams_provision.rcprovision.common')
     def test_compute_provision(self, _common_mock, nc):
         _common_mock.get_nova_client.return_value = nc
@@ -210,7 +210,7 @@ class TenancyTests(ProvisionTestCase):
                          'Nova compute provision error, ' + exception_msg)
         _common_mock.get_nova_quota.side_effect = None
 
-    @mock.patch('crams_provision._common.nova_client')
+    @mock.patch('crams_provision.common.nova_client')
     @mock.patch('crams_provision.rcprovision.common')
     def test_volume_storage_provision(self, _common_mock, nc):
         _common_mock.get_nova_client.return_value = nc
@@ -252,7 +252,7 @@ class TenancyTests(ProvisionTestCase):
                          'GB, Cinder volume provision error, ' + exception_msg)
         _common_mock.add_cinder_quota.side_effect = None
 
-    @mock.patch('crams_provision._common.nova_client')
+    @mock.patch('crams_provision.common.nova_client')
     @mock.patch('crams_provision.rcprovision.common')
     def test_object_storage_provision(self, _common_mock, nc):
         _common_mock.get_nova_client.return_value = nc
