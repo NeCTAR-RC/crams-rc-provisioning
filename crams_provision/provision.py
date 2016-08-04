@@ -2,6 +2,8 @@ import sys
 import getopt
 
 from crams_provision.rcprovision import NcProvision
+import logging.config
+from crams_provision import settings
 
 
 class Usage(Exception):
@@ -73,6 +75,7 @@ def allocations_provision():
 
 
 def main(argv=None):
+    logging.config.dictConfig(settings.LOGGING_CONF)
     try:
         try:
             opts, args = getopt.getopt(sys.argv[1:], "hl", ["help", "list"])
