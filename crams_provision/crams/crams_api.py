@@ -37,17 +37,16 @@ def update_provision_results(url, provision_results_json, token):
                                 body=provision_results_json)
 
         status = response.status
-        print('Provision updating response status code: {}'.format(status))
+        LOG.debug('Provision updating response status code: '
+                  '{}'.format(status))
         if status == 200 or status == 201:
             res_dict = simplejson.loads(response.data)
-            print(res_dict)
-            LOG.info('Provision updating callback success')
-            print('Provision updating callback success')
+            LOG.info('Provision updating callback success, '
+                     '{}'.format(res_dict))
         else:
             error_msg = 'Provision updating callback error, ' \
                         '{}'.format(response.data)
             LOG.error(error_msg)
-            print(error_msg)
     except Exception as e:
         error_msg = 'Failed to update the provision{}, error: {}'.format(
             url, e)

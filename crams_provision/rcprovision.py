@@ -1,22 +1,20 @@
-from collections import defaultdict
-import sys
 import logging
+import sys
+from collections import defaultdict
 
 import simplejson
 
+from crams_provision import common
 from crams_provision import settings
-from crams_provision.crams.crams_auth import cram_kstoken_login
+from crams_provision.crams.crams_alloc_parser import parse_allocations
 from crams_provision.crams.crams_api import get_approved_requests
 from crams_provision.crams.crams_api import update_provision_results
+from crams_provision.crams.crams_auth import cram_kstoken_login
 from crams_provision.crams.exceptions import ProvisionException, \
     IdentifierException
-from crams_provision.crams.crams_alloc_parser import parse_allocations
 from crams_provision.crams.provision_details import ProjectProvisionStatus, \
     RequestProvisionStatus, ComputeProvisionStatus, StorageProvisionStatus, \
     Prod, System, ProjectId
-from crams_provision.crams.nectar_allocation import NcProject, \
-    NcNovaQuota, NcCinderQuota, NcSwiftQuota
-from crams_provision import common
 
 LOG = logging.getLogger(__name__)
 
@@ -95,7 +93,6 @@ class NcProvision(object):
         except Exception as ex:
             error_msg = 'Keystone Authorization failed, {}'.format(ex)
             LOG.error(error_msg)
-            print(error_msg)
             sys.exit(1)
 
         crams_auth_response = self._auth()
@@ -107,7 +104,6 @@ class NcProvision(object):
             error_msg = 'CRAMS Authorization failed, ' \
                         '{}'.format(crams_auth_response['reason'])
             LOG.error(error_msg)
-            print(error_msg)
             sys.exit(1)
         alloc_list = []
         if alloc_res['success']:
@@ -117,19 +113,17 @@ class NcProvision(object):
             except Exception as ex:
                 error_msg = 'Failed to parse allocations json, {}'.format(ex)
                 LOG.error(error_msg)
-                print(error_msg)
                 sys.exit(0)
         else:
             error_msg = 'Get allocations failed, {}'.format(
                 alloc_res['reason'])
             LOG.error(error_msg)
-            print(error_msg)
             sys.exit(0)
 
         return alloc_list, token
 
     def provision(self, alloc_list, token):
-        print('Start to provision ...')
+        LOG.info('Start to provision ...')
         if alloc_list:
             for nc_proj in alloc_list:
                 self._print_request_provision(nc_proj)
@@ -192,7 +186,6 @@ class NcProvision(object):
                         except Exception as ex:
                             error_msg = '{}'.format(ex)
                             LOG.error(error_msg)
-                            print(error_msg)
 
                     # swift object provision
                     obj_storage = defaultdict(int)
@@ -207,7 +200,7 @@ class NcProvision(object):
                                 tenant)
 
                 self.provision_result_callback(proj_prov, token)
-        print('Finished to provision ...')
+        LOG.info('Finished to provision ...')
 
     def provision_swift_request(self, nc_swift_quota, obj_storage,
                                 storage_provisions, tenant):
@@ -244,7 +237,6 @@ class NcProvision(object):
                             '{}'.format(objects, ex)
                 st_prov.message = error_msg
                 LOG.error(error_msg)
-                print(error_msg)
             storage_provisions.append(st_prov)
 
     def provision_cinder_requests(self, nc_cinder_quota,
@@ -288,7 +280,6 @@ class NcProvision(object):
                               '{}'.format(zone, gigabytes, error_msg)
 
             LOG.error(error_msg)
-            print(error_msg)
         storage_provisions.append(st_prov)
         return requesting_nectar_quota, sum_quota
 
@@ -316,7 +307,6 @@ class NcProvision(object):
                         '{}'.format(ex)
             com_prov.message = error_msg
             LOG.error(error_msg)
-            print(error_msg)
 
         # append each compute provision
         # result into list
@@ -349,7 +339,6 @@ class NcProvision(object):
 
             proj_prov.message = error_msg
             LOG.error(error_msg)
-            print(error_msg)
         return tenant
 
     def _gen_project_ids(self, tenant_uuid):
@@ -381,7 +370,7 @@ class NcProvision(object):
 
     def provision_result_callback(self, project_provision, token):
         provision_result_json = simplejson.dumps(project_provision.to_dict())
-        print('provision result: {}'.format(provision_result_json))
+        LOG.debug('provision result: {}'.format(provision_result_json))
         update_provision_results(self.provision_update_url,
                                  provision_result_json, token)
 
@@ -463,26 +452,3 @@ class NcProvision(object):
         except Exception as ex:
             raise ProvisionException(
                 'Swift object provision error, {}'.format(ex))
-
-    def dummy_allocations(self):
-        nc_project = NcProject(10, 'test_trial_convering_003',
-                               'simon trial convert test 003',
-                               'xiaoming.yu@monash.edu',
-                               '2016-12-30', False, 'monash', 10)
-        nc_alloctions = []
-        nc_cinder_quota_list = []
-        cinder_quota = NcCinderQuota(10, 'volume', 'monash', 2, 3)
-        nc_cinder_quota_list.append(cinder_quota)
-        cinder_quota = NcCinderQuota(10, 'volume', 'melbourne', 2, 2)
-        nc_cinder_quota_list.append(cinder_quota)
-        nc_nova_quota_list = []
-        nova_quota = NcNovaQuota(10, 6, 10, 4096, 1)
-        nc_nova_quota_list.append(nova_quota)
-        nc_project.set_cinder_quota_list(nc_cinder_quota_list)
-        nc_project.set_nova_quota_list(nc_nova_quota_list)
-        nc_swift_quota_list = []
-        swift_quota = NcSwiftQuota(10, 'object', 'nectar', 12, 9)
-        nc_swift_quota_list.append(swift_quota)
-        nc_project.set_swift_quota_list(nc_swift_quota_list)
-        nc_alloctions.append(nc_project)
-        return nc_alloctions

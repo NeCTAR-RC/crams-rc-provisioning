@@ -56,6 +56,8 @@ class ComputeProvisionStatus(object):
         comp_dict['message'] = self.message
         comp_dict['success'] = self.is_success
         comp_dict['compute_product'] = {'id': self.compute_prod.id}
+        if not self.is_success:
+            comp_dict['resend'] = True
         return comp_dict
 
 
@@ -78,6 +80,8 @@ class StorageProvisionStatus(object):
         st_dict['message'] = self.message
         st_dict['success'] = self.is_success
         st_dict['storage_product'] = {'id': self.storage_prod.id}
+        if not self.is_success:
+            st_dict['resend'] = True
         return st_dict
 
 
@@ -125,6 +129,11 @@ class ProjectProvisionStatus(object):
         alloc_resp_dict['id'] = self.id
         alloc_resp_dict['message'] = self.message
         alloc_resp_dict['success'] = self.is_success
+        # if provision is unsuccess, set resend as true
+        # when call crams-api provision result updating
+        if not self.is_success:
+            alloc_resp_dict['resend'] = True
+
         alloc_resp_dict['requests'] = []
         if self.request_provisions:
             request_provision_list = []
@@ -140,6 +149,8 @@ class ProjectProvisionStatus(object):
                     storage_prov_list = []
                     request_prov_dict['storage_requests'] = storage_prov_list
                     for storage_prov in storage_provisions:
+                        if not storage_prov.is_success:
+                            alloc_resp_dict['resend'] = True
                         storage_prov_list.append(storage_prov.to_dict())
 
                 compute_provisions = request_prov.compute_provisions
@@ -148,6 +159,8 @@ class ProjectProvisionStatus(object):
                     compute_prov_list = []
                     request_prov_dict['compute_requests'] = compute_prov_list
                     for compute_prov in compute_provisions:
+                        if not storage_prov.is_success:
+                            alloc_resp_dict['resend'] = True
                         compute_prov_list.append(compute_prov.to_dict())
         project_id_list = []
         alloc_resp_dict['project_ids'] = project_id_list

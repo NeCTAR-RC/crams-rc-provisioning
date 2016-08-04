@@ -14,3 +14,59 @@ OS_AUTH_URL = 'http://localhost:5000/v3/'
 OS_PROJECT_NAME = 'merc_test_project'
 OS_USERNAME = 'keystone_admin'
 OS_PASSWORD = 'keystone_admin_password'
+
+# --- CRAMS RC Provisioning Logging ---
+# logging directory
+PROVISION_LOG_DIR = '/var/log'
+
+LOGGING_CONF = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {
+            "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+        }
+    },
+
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "level": "INFO",
+            "formatter": "simple",
+            "stream": "ext://sys.stdout"
+        },
+
+        "info_file_handler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "INFO",
+            "formatter": "simple",
+            "filename": PROVISION_LOG_DIR + "/provision.log",
+            'maxBytes': 1024 * 1024 * 10,
+            "backupCount": 5,
+            "encoding": "utf8"
+        },
+
+        "error_file_handler": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "level": "ERROR",
+            "formatter": "simple",
+            "filename": PROVISION_LOG_DIR + "/provision_errors.log",
+            'maxBytes': 1024 * 1024 * 10,
+            "backupCount": 5,
+            "encoding": "utf8"
+        }
+    },
+
+    "loggers": {
+        "crams_provision": {
+            "level": "INFO",
+            "handlers": ["console", "info_file_handler", "error_file_handler"],
+            "propagate": False
+        }
+    },
+
+    "root": {
+        "level": "INFO",
+        "handlers": ["console", "info_file_handler", "error_file_handler"]
+    }
+}
