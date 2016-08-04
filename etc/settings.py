@@ -14,3 +14,7 @@ OS_AUTH_URL = 'http://localhost:5000/v3/'
 OS_PROJECT_NAME = 'merc_test_project'
 OS_USERNAME = 'keystone_admin'
 OS_PASSWORD = 'keystone_admin_password'
+
+# --- CRAMS RC Provisioning Logging ---
+# logging directory
+PROVISION_LOG_DIR = '/var/log/cramsclient-nectar'
