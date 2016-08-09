@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_b30b8a2a",
+        "filename": "etc/settings.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2016-08-09T01:58:21Z",
+      "side": 1,
+      "message": "similar code is already in crams_provision/settings.py. is there a reason for repeating it here? Comments say this config \u0027overrides\u0027 the default setting so there\u0027s no need for any of this if it\u0027s the same?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 1
+      },
+      "revId": "a468a9c381974cc591449385b9f7c2fdac3a0622",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
