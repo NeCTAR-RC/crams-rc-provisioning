@@ -30,7 +30,7 @@ def add_tenant(kc, name, description, manager_email, allocation_id, expiry,
 
     # get the default domain, required to create a project in V3
     try:
-        domain = kc.domains.find(name="Default")
+        domain = kc.domains.get("Default")
     except:
         raise ProvisionException("Couldn't find the default domain")
 
