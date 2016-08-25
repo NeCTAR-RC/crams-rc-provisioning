@@ -71,7 +71,7 @@ class CommonMethodsTest(ProvisionTestCase):
         test_tenant = get_dynamic_class('Tenant', {'id': tenant_id})
         # set return value for method
         kc.projects.create.return_value = test_tenant
-        kc.domains.find.return_value = "Default"
+        kc.domains.get.return_value = "Default"
 
         # Test normal success scenario
         tenant = common.add_tenant(kc, name,
