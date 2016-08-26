@@ -159,7 +159,7 @@ class ProjectProvisionStatus(object):
                     compute_prov_list = []
                     request_prov_dict['compute_requests'] = compute_prov_list
                     for compute_prov in compute_provisions:
-                        if not storage_prov.is_success:
+                        if not compute_prov.is_success:
                             alloc_resp_dict['resend'] = True
                         compute_prov_list.append(compute_prov.to_dict())
         project_id_list = []
