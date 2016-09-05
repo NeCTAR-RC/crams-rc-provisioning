@@ -37,6 +37,8 @@ def cram_kstoken_login(url, ks_token):
         response = http.request('POST', url=url, headers=headers,
                                 body=json_body)
         status = response.status
+        LOG.debug('crams keystone token login status code: '
+                  '{}'.format(status))
         if status == 200:
             res_dict = simplejson.loads(response.data)
             token = res_dict.get('token')
