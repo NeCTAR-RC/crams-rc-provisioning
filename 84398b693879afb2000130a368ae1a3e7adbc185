@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_8ff3b772",
+        "filename": "crams_provision/crams/crams_auth.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-09-05T23:30:47Z",
+      "side": 1,
+      "message": "you don\u0027t need these if statements, just add messages at the desired level and then it\u0027s determined in the logging config what gets displayed. Have a read of the python logging docs",
+      "range": {
+        "startLine": 40,
+        "startChar": 8,
+        "endLine": 40,
+        "endChar": 43
+      },
+      "revId": "84398b693879afb2000130a368ae1a3e7adbc185",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_6fee6b8d",
+        "filename": "crams_provision/provision.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-09-05T23:30:47Z",
+      "side": 1,
+      "message": "the script isn\u0027t called provision.py it\u0027s called crams-provision-nectar",
+      "range": {
+        "startLine": 18,
+        "startChar": 36,
+        "endLine": 18,
+        "endChar": 48
+      },
+      "revId": "84398b693879afb2000130a368ae1a3e7adbc185",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
