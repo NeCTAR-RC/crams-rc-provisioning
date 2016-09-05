@@ -198,7 +198,8 @@ class NcProvision(object):
                                 obj_storage,
                                 storage_provisions,
                                 tenant)
-
+                LOG.debug(
+                    'start to crams-api callback for provision result ...')
                 self.provision_result_callback(proj_prov, token)
         LOG.info('Finished to provision ...')
 
