@@ -198,7 +198,8 @@ class NcProvision(object):
                                 obj_storage,
                                 storage_provisions,
                                 tenant)
-
+                if LOG.isEnabledFor(logging.DEBUG):
+                    LOG.debug('start to crams-api callback for provision result ...')
                 self.provision_result_callback(proj_prov, token)
         LOG.info('Finished to provision ...')
 
@@ -370,7 +371,8 @@ class NcProvision(object):
 
     def provision_result_callback(self, project_provision, token):
         provision_result_json = simplejson.dumps(project_provision.to_dict())
-        LOG.debug('provision result: {}'.format(provision_result_json))
+        if LOG.isEnabledFor(logging.DEBUG):
+            LOG.debug('provision result: {}'.format(provision_result_json))
         update_provision_results(self.provision_update_url,
                                  provision_result_json, token)
 
