@@ -1,34 +1,11 @@
-import sys
-import getopt
-
-from crams_provision.rcprovision import NcProvision
+import argparse
 import logging.config
+import sys
+
 from crams_provision import settings
+from crams_provision.rcprovision import NcProvision
 
-
-class Usage(Exception):
-    def __init__(self, msg):
-        self.msg = msg
-
-    @classmethod
-    def show_help(self):
-        usage = ['%s' % '']
-        usage.append('%s' % 'usage: provision.py '
-                            '[-h | --help] [-l | --list] [id]')
-        usage.append('%s' % '')
-        usage.append('%s' % '    -h, --help          '
-                            'show the help message and exit')
-        usage.append('%s' % '    -l, --list          '
-                            'list all allocations ids and exit')
-        usage.append('%s' % '    id                  '
-                            'single allocation request '
-                            'provisioning and exit')
-        usage.append('%s' % '    provision.py        '
-                            'without any arguments. provision all '
-                            'allocation requests and exit')
-        usage.append('%s' % '')
-        for help in usage:
-            print(help)
+LOG = logging.getLogger(__name__)
 
 
 def list_allocation_ids():
@@ -75,46 +52,55 @@ def allocations_provision():
 
 
 def main(argv=None):
+    parser = argparse.ArgumentParser(add_help=True,
+                                     prog='crams-provision-nectar',
+                                     description='''
+                                     By default provisions all pending
+                                     allocation requests
+                                     '''
+                                     )
+
+    group = parser.add_mutually_exclusive_group()
+
+    group.add_argument('-l', '--list', action="store_true",
+           help='list all allocations ids and exit')
+
+    group.add_argument('-r', '--request-id', action='store',
+           dest='request_id', type=int,
+           help='only provision the specified allocation request id')
+
+    parser.add_argument('-d', '--debug', action="store_true",
+           help='enable debug logging')
+
+    args = parser.parse_args()
+    if args.debug:
+        settings.LOGGING_CONF['handlers']['console']['level'] = 'DEBUG'
+        settings.LOGGING_CONF['root']['level'] = 'DEBUG'
+        settings.LOGGING_CONF['loggers']['crams_provision']['level'] = 'DEBUG'
+
     logging.config.dictConfig(settings.LOGGING_CONF)
-    try:
-        try:
-            opts, args = getopt.getopt(sys.argv[1:], "hl", ["help", "list"])
-        except getopt.GetoptError as ex:
-            raise Usage(ex)
-    except Usage as usage:
-        print(usage.msg)
-        usage.show_help()
 
-        sys.exit(2)
+    list_command = args.list
+    req_id = args.request_id
 
-    for opt, o in opts:
-        # show help
-        if opt == '-h' or opt == '--help':
-            Usage.show_help()
-            sys.exit(2)
-        # list allocation request ids
-        if opt == '-l' or opt == '--list':
-            list_allocation_ids()
-            sys.exit(2)
+    # will rise error if request id is 0 or negative number
+    if req_id and req_id < 1:
+        parser.error('the allocation id must be greater than 0')
 
-    # do all alloctions request provisioning
-    if len(args) == 0:
+    # if no -l and no -p arguments, process all allocations provisioning
+    if not list_command and not req_id:
         allocations_provision()
-        sys.exit(2)
-    # single allocation request provisioning
-    elif len(args) == 1:
-        try:
-            id = int(args[0])
-            single_req_provision(id)
-        except ValueError as ex:
-            print('Invalid literal for int: {}'.format(args[0]))
-            Usage.show_help()
-        sys.exit(2)
-    # invalid arguments
-    else:
-        print('too many arguments')
-        Usage.show_help()
-        sys.exit(2)
+        sys.exit(0)
+
+    # list all allocation request and exit
+    if list_command:
+        list_allocation_ids()
+        sys.exit(0)
+
+    # provision single allocation request
+    if req_id:
+        single_req_provision(req_id)
+        sys.exit(0)
 
 
 if __name__ == "__main__":
