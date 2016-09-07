@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adec928_12ffce35",
+        "filename": "crams_provision/provision.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-09-07T22:29:47Z",
+      "side": 1,
+      "message": "this is built in to argparse and not needed",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 61
+      },
+      "revId": "a6d5c1d3ed6bb9787de1d9b70b10b2d2498cbd05",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_d2ed668d",
+        "filename": "crams_provision/provision.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-09-07T22:29:47Z",
+      "side": 1,
+      "message": "is this argument meant to take in an allocation ID to process a single allocation? If so it should say that. Also what does the default -1 mean?",
+      "range": {
+        "startLine": 85,
+        "startChar": 29,
+        "endLine": 85,
+        "endChar": 53
+      },
+      "revId": "a6d5c1d3ed6bb9787de1d9b70b10b2d2498cbd05",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_f201823a",
+        "filename": "crams_provision/provision.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-09-07T22:29:47Z",
+      "side": 1,
+      "message": "this is built in to argparse and not needed",
+      "range": {
+        "startLine": 90,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 62
+      },
+      "revId": "a6d5c1d3ed6bb9787de1d9b70b10b2d2498cbd05",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_32fcca3e",
+        "filename": "crams_provision/provision.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-09-07T22:29:47Z",
+      "side": 1,
+      "message": "this is built in to argparse and not needed",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 102,
+        "endChar": 32
+      },
+      "revId": "a6d5c1d3ed6bb9787de1d9b70b10b2d2498cbd05",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    }
+  ]
+}
