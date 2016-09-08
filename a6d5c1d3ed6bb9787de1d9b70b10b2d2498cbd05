@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "7adec928_f567ace8",
+        "filename": "crams_provision/provision.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000133
+      },
+      "writtenOn": "2016-09-08T00:43:47Z",
+      "side": 1,
+      "message": "I knew it, but the default usage text is not lineup and ugly.\n\ndo you still want the default usage format?",
+      "parentUuid": "7adec928_f5408c37",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 61
+      },
+      "revId": "a6d5c1d3ed6bb9787de1d9b70b10b2d2498cbd05",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7adec928_d2ed668d",
         "filename": "crams_provision/provision.py",
         "patchSetId": 5
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "OK then say that in the help text, you could probably to nice logic here and make it an optional field with no default. If no option given then do all",
       "parentUuid": "7adec928_d52550ac",
+      "range": {
+        "startLine": 85,
+        "startChar": 29,
+        "endLine": 85,
+        "endChar": 53
+      },
+      "revId": "a6d5c1d3ed6bb9787de1d9b70b10b2d2498cbd05",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_f5aecce6",
+        "filename": "crams_provision/provision.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000133
+      },
+      "writtenOn": "2016-09-08T00:43:47Z",
+      "side": 1,
+      "message": "if no argument provided, then do processing all allocation requests. I can change it in that way.",
+      "parentUuid": "7adec928_153ed8b8",
       "range": {
         "startLine": 85,
         "startChar": 29,
