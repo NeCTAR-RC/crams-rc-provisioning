@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "7adec928_35b9142f",
+        "filename": "crams_provision/provision.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-09-08T00:47:00Z",
+      "side": 1,
+      "message": "Yes please, less code the better! Also it\u0027s automated as opposed to manual",
+      "parentUuid": "7adec928_f567ace8",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 61
+      },
+      "revId": "a6d5c1d3ed6bb9787de1d9b70b10b2d2498cbd05",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7adec928_d2ed668d",
         "filename": "crams_provision/provision.py",
         "patchSetId": 5
