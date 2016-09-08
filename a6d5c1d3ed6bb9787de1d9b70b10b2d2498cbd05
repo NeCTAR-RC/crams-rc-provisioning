@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "7adec928_f5408c37",
+        "filename": "crams_provision/provision.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-09-08T00:32:12Z",
+      "side": 1,
+      "message": "See https://docs.python.org/3/library/argparse.html#prog on how to override",
+      "parentUuid": "7adec928_f5124c57",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 61
+      },
+      "revId": "a6d5c1d3ed6bb9787de1d9b70b10b2d2498cbd05",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7adec928_d2ed668d",
         "filename": "crams_provision/provision.py",
         "patchSetId": 5
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "crams-provision-nectar -p id, will process a single allocation.\n\n-1 or 0 as default value should be ok, this default value will be a checking condition. if an user put a negative number or zero",
       "parentUuid": "7adec928_d2ed668d",
+      "range": {
+        "startLine": 85,
+        "startChar": 29,
+        "endLine": 85,
+        "endChar": 53
+      },
+      "revId": "a6d5c1d3ed6bb9787de1d9b70b10b2d2498cbd05",
+      "serverId": "f182a8af-62ca-4ceb-ab81-14f8fec9c6c5",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7adec928_153ed8b8",
+        "filename": "crams_provision/provision.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2016-09-08T00:32:12Z",
+      "side": 1,
+      "message": "OK then say that in the help text, you could probably to nice logic here and make it an optional field with no default. If no option given then do all",
+      "parentUuid": "7adec928_d52550ac",
       "range": {
         "startLine": 85,
         "startChar": 29,
