@@ -229,10 +229,15 @@ def convert_trial_project(username, new_project_name, new_description):
         except:
             raise ProvisionException("Couldn't find the default domain")
             # Create new trial project.
-        new_trial_project = kc.projects.create(
-            name=user_trial_project.name + '_copy',
-            description=user_trial_project.description,
-            domain=domain)
+
+        tmp_project_name = user_trial_project.name + '_copy'
+        try:
+            new_trial_project = client.projects.find(name=tmp_project_name)
+        except:
+            new_trial_project = kc.projects.create(
+                name=tmp_project_name,
+                description=user_trial_project.description,
+                domain=domain)
 
         # Rename existing trial project to new project name/desc.
         # Reset status in case their pt- is pending suspension.
