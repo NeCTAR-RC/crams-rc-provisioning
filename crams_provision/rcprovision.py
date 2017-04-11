@@ -132,7 +132,7 @@ class NcProvision(object):
                 # create a project provision result status
                 proj_prov = ProjectProvisionStatus(p_id)
 
-                tenant = self.provison_tenant(nc_proj, proj_prov)
+                tenant = self.provision_tenant(nc_proj, proj_prov)
 
                 if tenant:
                     # initialize the request provision results
@@ -313,7 +313,7 @@ class NcProvision(object):
         # result into list
         compute_provisions.append(com_prov)
 
-    def provison_tenant(self, nc_proj, proj_prov):
+    def provision_tenant(self, nc_proj, proj_prov):
         proj_uuid = nc_proj.tenant_uuid
         tenant = None
         try:
@@ -321,7 +321,7 @@ class NcProvision(object):
             # set the project provision status and message
             # if success
             proj_prov.is_success = True
-            proj_prov.message = '{} has been provisoned' \
+            proj_prov.message = '{} has been provisioned' \
                                 ' successfully'.format(nc_proj.description)
 
             # set the project uuid
@@ -335,7 +335,7 @@ class NcProvision(object):
                 proj_prov.project_ids = project_ids
             # if project provision failed, just log it and set
             # provision error message
-            error_msg = 'Failed to provison project - ' \
+            error_msg = 'Failed to provision project - ' \
                         '{}, {}'.format(nc_proj.description, ex)
 
             proj_prov.message = error_msg
