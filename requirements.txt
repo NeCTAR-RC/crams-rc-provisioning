@@ -5,3 +5,4 @@ python-novaclient==3.3.1
 python-swiftclient==3.0.0
 simplejson==3.8.1
 urllib3==1.13.1
+requests>=2.10.0,!=2.12.2,!=2.13.0
